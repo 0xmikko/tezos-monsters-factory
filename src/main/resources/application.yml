@@ -1,0 +1,7 @@
+tezosmonsters:
+  factory:
+    pictures_folder: pictures
+
+logging:
+  level:
+    web: debug
