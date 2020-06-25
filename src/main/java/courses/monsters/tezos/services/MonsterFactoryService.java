@@ -13,6 +13,7 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -34,6 +35,14 @@ public class MonsterFactoryService {
     public void init() {
 
         maxItem = new HashMap<>();
+        try {
+            File file = ResourceUtils.getFile(path);
+            System.out.println("Looking pictures in " + file.getAbsolutePath());
+        } catch (IOException e) {
+            System.out.println(e);
+        }
+
+
         maxBody = getMaxImageNumber("body");
         Arrays.stream(parts).forEach(p -> maxItem.put(p, getMaxImageNumber(p)));
         System.out.println(this.toString());
@@ -83,6 +92,7 @@ public class MonsterFactoryService {
                 result++;
             }
         } catch (IOException e) {
+            System.out.println(e);
             return result - 1;
         }
     }
