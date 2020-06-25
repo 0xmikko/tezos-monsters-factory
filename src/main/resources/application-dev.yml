@@ -1,6 +1,6 @@
 tezosmonsters:
   factory:
-    pictures_folder: {PICTURES}
+    pictures_folder: ./src/main/resources/pictures
 
 logging:
   level:

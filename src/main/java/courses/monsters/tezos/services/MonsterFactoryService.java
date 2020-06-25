@@ -27,7 +27,7 @@ public class MonsterFactoryService {
     private int maxBody;
     private Map<String, Integer> maxItem;
 
-    @Value("classpath:${tezosmonsters.factory.pictures_folder}")
+    @Value("${tezosmonsters.factory.pictures_folder}")
     private String path;
 
 
@@ -57,7 +57,7 @@ public class MonsterFactoryService {
     public byte[] getImage(Monster monster) throws IOException {
 
         // load body image
-        BufferedImage body = ImageIO.read(ResourceUtils.getFile(path + "/body_" + monster.getBody_id() + ".png"));
+        BufferedImage body = ImageIO.read(new File(path + "/body_" + monster.getBody_id() + ".png"));
         // create the new image, canvas size is the max. of both image sizes
         int w = body.getWidth();
         int h = body.getHeight() + 200;
@@ -68,7 +68,7 @@ public class MonsterFactoryService {
         monster.getParts().entrySet().forEach(p -> {
             try {
                 var monsterPart = p.getValue();
-                BufferedImage partImage = ImageIO.read(ResourceUtils.getFile(path + "/" + p.getKey() + "_" + monsterPart.getId() + ".png"));
+                BufferedImage partImage = ImageIO.read(new File(path + "/" + p.getKey() + "_" + monsterPart.getId() + ".png"));
                 g.drawImage(partImage, monsterPart.getX(), monsterPart.getY(), null);
             } catch (IOException e) {
                 System.out.println("Problem with " + p);
@@ -88,10 +88,13 @@ public class MonsterFactoryService {
         int result = 1;
         try {
             while (true) {
-                ResourceUtils.getFile(path + "/" + part + "_" + result + ".png");
+                File file = new File(path + "/" + part + "_" + result + ".png");
+                if (!file.canRead()) {
+                    throw new Exception("Can read" + file.getAbsolutePath());
+                }
                 result++;
             }
-        } catch (IOException e) {
+        } catch (Exception e) {
             System.out.println(e);
             return result - 1;
         }
